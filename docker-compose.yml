@@ -5,11 +5,12 @@ services:
   # Master node: NameNode + ResourceManager
   # ---------------------------
   master:
-    image: apache/hadoop:3.4.1
+    image: my-hadoop:3.4.1
     container_name: hadoop-master
     hostname: master
     environment:
       - HDFS_NAMENODE=true
+      - HDFS_NAMENODE_DIR=/hadoop/dfs/name
       - YARN_RESOURCEMANAGER=true
     ports:
       - "9870:9870"   # HDFS NameNode UI
@@ -20,11 +21,8 @@ services:
       - hadoop-net
     command: >
       bash -c "
-        hdfs namenode -format -force &&
-        hdfs namenode &
         yarn resourcemanager &
-        sleep 10 &&
-        tail -f /dev/null
+        hdfs namenode
       "
     env_file:
         - ./config
@@ -33,7 +31,7 @@ services:
   # Worker nodes: DataNode + NodeManager
   # ---------------------------
   worker1:
-    image: apache/hadoop:3.4.1
+    image: my-hadoop:3.4.1
     container_name: hadoop-worker1
     hostname: worker1
     environment:
@@ -55,7 +53,7 @@ services:
         - ./config
 
   worker2:
-    image: apache/hadoop:3.4.1
+    image: my-hadoop:3.4.1
     container_name: hadoop-worker2
     hostname: worker2
     environment:
@@ -77,7 +75,7 @@ services:
         - ./config
 
   worker3:
-    image: apache/hadoop:3.4.1
+    image: my-hadoop:3.4.1
     container_name: hadoop-worker3
     hostname: worker3
     environment:
@@ -102,11 +100,13 @@ services:
   # Client node: submit Spark jobs
   # ---------------------------
   client:
-    image: apache/hadoop:3.4.1
+    image: my-hadoop:3.4.1
     container_name: hadoop-client
     hostname: client
     networks:
       - hadoop-net
+    volumes:
+      - ./data:/tmp/data
     depends_on:
       - master
       - worker1

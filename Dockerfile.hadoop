@@ -1,0 +1,7 @@
+FROM apache/hadoop:3.4.1
+
+USER root
+RUN mkdir -p /hadoop/dfs/name /hadoop/dfs/data \
+    && chown -R hadoop:hadoop /hadoop/dfs
+
+USER hadoop
