@@ -4,4 +4,15 @@ USER root
 RUN mkdir -p /hadoop/dfs/name /hadoop/dfs/data \
     && chown -R hadoop:hadoop /hadoop/dfs
 
+# Install Spark
+ENV SPARK_VERSION=3.4.2
+COPY spark-3.4.2-bin-hadoop3.tgz /tmp/spark.tgz
+RUN tar -xzf /tmp/spark.tgz -C /opt/ \
+    && mv /opt/spark-${SPARK_VERSION}-bin-hadoop3 /opt/spark \
+    && chown -R hadoop:hadoop /opt/spark \
+    && rm /tmp/spark.tgz
+
+ENV SPARK_HOME=/opt/spark
+ENV PATH=$SPARK_HOME/bin:$PATH
+
 USER hadoop
