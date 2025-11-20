@@ -1,0 +1,16 @@
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>3</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///home/lyroxyy/BigData/cluster/master/name</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///home/lyroxyy/BigData/cluster/worker1/data,file:///home/lyroxyy/BigData/cluster/worker2/data,file:///home/lyroxyy/BigData/cluster/worker3/data</value>
+  </property>
+</configuration>
